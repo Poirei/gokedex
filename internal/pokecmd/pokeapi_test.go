@@ -53,7 +53,7 @@ func TestFetchLocationAreas(t *testing.T) {
 		}
 	})
 
-	t.Run("fetches data from API successfully", func(t *testing.T) {
+	t.Run("fetches and caches data from API successfully", func(t *testing.T) {
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			responseData := ResponseData{
 				Next:     "http://example.com/next",
@@ -105,6 +105,21 @@ func TestFetchLocationAreas(t *testing.T) {
 
 		if len(cachedLocationAreas) != 2 {
 			t.Fatalf("expected 2 location areas in cache, got %d", len(cachedLocationAreas))
+		}
+	})
+
+	t.Run("handles http errors correctly", func(t *testing.T) {
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		}))
+		defer server.Close()
+
+		config.Next = server.URL
+
+		_, err := fetchLocationAreas("map", config, cache)
+
+		if err == nil || err.Error() != "unable to fetch location areas: 500" {
+			t.Fatalf("expected error 'unable to fetch location areas: 500', got '%v'", err)
 		}
 	})
 }

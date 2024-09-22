@@ -12,7 +12,7 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(c *pokecmd.Config, cache *pokecache.Cache) error
+	callback    func(c *pokecmd.Config, cache *pokecache.Cache, locationArea string) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -37,10 +37,15 @@ func getCommands() map[string]cliCommand {
 			description: "Similar to the map command, however, instead of displaying the next 20 locations, it displays the previous 20 locations. It's a way to go back.",
 			callback:    pokecmd.CommandMapb,
 		},
+		"explore": {
+			name:        "explore <location_area>",
+			description: "Displays the names of all the Pokémon that can be encountered in the given location area.",
+			callback:    pokecmd.CommandExplore,
+		},
 	}
 }
 
-func commandHelp(_ *pokecmd.Config, _ *pokecache.Cache) error {
+func commandHelp(_ *pokecmd.Config, _ *pokecache.Cache, _ string) error {
 	fmt.Println("\nWelcome to the Pokedex CLI!\nUsage:")
 	fmt.Print("\n")
 
@@ -53,7 +58,7 @@ func commandHelp(_ *pokecmd.Config, _ *pokecache.Cache) error {
 	return nil
 }
 
-func commandExit(_ *pokecmd.Config, _ *pokecache.Cache) error {
+func commandExit(_ *pokecmd.Config, _ *pokecache.Cache, _ string) error {
 	os.Exit(0)
 
 	return errors.New("Error exiting Pokedex.")

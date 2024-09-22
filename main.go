@@ -35,6 +35,22 @@ func main() {
 		input := scanner.Text()
 		input = strings.TrimSpace(input)
 
+		fields := strings.Fields(input)
+		input = fields[0]
+
+		locationArea := ""
+
+		if input == "explore" {
+			if len(fields) != 2 {
+				fmt.Println("\nMissing arg. Please type 'help' for available commands.")
+				fmt.Print("\n")
+
+				continue
+			} else {
+				locationArea = fields[1]
+			}
+		}
+
 		command, ok := commands[input]
 
 		if !ok {
@@ -44,7 +60,7 @@ func main() {
 			continue
 		}
 
-		if err := command.callback(&config, cache); err != nil {
+		if err := command.callback(&config, cache, locationArea); err != nil {
 			fmt.Println("\nError executing command:\n", err)
 			fmt.Println()
 		}
