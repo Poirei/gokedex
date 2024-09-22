@@ -12,7 +12,7 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(c *pokecmd.Config, cache *pokecache.Cache, locationArea string) error
+	callback    func(c *pokecmd.Config, cache *pokecache.Cache, locationArea string, pokemonName string, pokedex *pokecmd.Pokedex) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -42,10 +42,15 @@ func getCommands() map[string]cliCommand {
 			description: "Displays the names of all the Pokémon that can be encountered in the given location area.",
 			callback:    pokecmd.CommandExplore,
 		},
+		"catch": {
+			name:        "catch <pokemon_name>",
+			description: "Attempts to catch a Pokémon. The Pokémon name should be provided as an argument to the catch command.",
+			callback:    pokecmd.CommandCatch,
+		},
 	}
 }
 
-func commandHelp(_ *pokecmd.Config, _ *pokecache.Cache, _ string) error {
+func commandHelp(_ *pokecmd.Config, _ *pokecache.Cache, _ string, _ string, _ *pokecmd.Pokedex) error {
 	fmt.Println("\nWelcome to the Pokedex CLI!\nUsage:")
 	fmt.Print("\n")
 
@@ -58,7 +63,7 @@ func commandHelp(_ *pokecmd.Config, _ *pokecache.Cache, _ string) error {
 	return nil
 }
 
-func commandExit(_ *pokecmd.Config, _ *pokecache.Cache, _ string) error {
+func commandExit(_ *pokecmd.Config, _ *pokecache.Cache, _ string, _ string, _ *pokecmd.Pokedex) error {
 	os.Exit(0)
 
 	return errors.New("Error exiting Pokedex.")
