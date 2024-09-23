@@ -42,7 +42,7 @@ func main() {
 		locationArea := ""
 		pokemonName := ""
 
-		if input == "explore" || input == "catch" {
+		if input == "explore" || input == "catch" || input == "inspect" {
 			if len(fields) != 2 {
 				fmt.Println("\nMissing arg. Please type 'help' for available commands.")
 				fmt.Print("\n")
@@ -53,6 +53,8 @@ func main() {
 				case "explore":
 					locationArea = fields[1]
 				case "catch":
+					pokemonName = fields[1]
+				case "inspect":
 					pokemonName = fields[1]
 				default:
 					fmt.Println("\nInvalid command. Please type 'help' for available commands.")
@@ -70,7 +72,7 @@ func main() {
 		}
 
 		if err := command.callback(&config, cache, locationArea, pokemonName, pokedex); err != nil {
-			fmt.Println("\nError executing command:\n", err)
+			fmt.Printf("\n%v\n", err)
 			fmt.Println()
 
 			continue

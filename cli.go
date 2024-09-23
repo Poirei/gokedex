@@ -47,6 +47,16 @@ func getCommands() map[string]cliCommand {
 			description: "Attempts to catch a Pokémon. The Pokémon name should be provided as an argument to the catch command.",
 			callback:    pokecmd.CommandCatch,
 		},
+		"inspect": {
+			name:        "inspect <pokemon_name>",
+			description: "Displays information about the given Pokémon, including its name, base experience, height, and weight.",
+			callback:    pokecmd.CommandInspect,
+		},
+		"pokedex": {
+			name:        "pokedex",
+			description: "Displays the names of all the Pokémon in your Pokedex.",
+			callback:    pokecmd.CommandPokedex,
+		},
 	}
 }
 

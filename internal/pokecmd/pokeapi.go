@@ -86,7 +86,46 @@ func CommandCatch(_ *Config, cache *pokecache.Cache, _ string, pokemonName strin
 
 	} else {
 		(*pokedex)[pokemonName] = pokemonInfo
+
 		fmt.Printf("\n%s was caught!\n", cases.Title(language.English).String(pokemonName))
+		fmt.Println("You may now inspect it with the inspect command.\n")
+	}
+
+	return nil
+}
+
+func CommandInspect(_ *Config, cache *pokecache.Cache, _ string, pokemonName string, pokedex *Pokedex) error {
+	pokemonInfo, ok := (*pokedex)[pokemonName]
+
+	if !ok {
+		return fmt.Errorf("\nyou have not caught that pokemon yet")
+	}
+
+	fmt.Printf("\nName: %s\nHeight: %d\nWeight: %d\n", cases.Title(language.English).String(pokemonName), pokemonInfo.Height, pokemonInfo.Weight)
+	fmt.Println("Stats:")
+
+	for _, item := range pokemonInfo.Stats {
+		fmt.Printf("  - %s: %d\n", item.Stat.Name, item.BaseStat)
+	}
+
+	fmt.Println("Types:")
+
+	for _, item := range pokemonInfo.Types {
+		fmt.Printf("  - %s\n", item.Type.Name)
+	}
+
+	return nil
+}
+
+func CommandPokedex(_ *Config, _ *pokecache.Cache, _ string, _ string, pokedex *Pokedex) error {
+	if len(*pokedex) == 0 {
+		return fmt.Errorf("\nYour Pokedex is empty")
+	}
+
+	fmt.Println("\nYour Pokedex:")
+
+	for key, _ := range *pokedex {
+		fmt.Printf("  - %s\n", cases.Title(language.English).String(key))
 	}
 
 	return nil
